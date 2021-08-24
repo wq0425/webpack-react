@@ -113,6 +113,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html',// 以当前文件作为模板创建新的html（1.结构和原来一样2.会自动引入打包的资源）
+            favicon: './public/favicon_icon.ico' // ../public/favicon.ico
         })
     ],
     // 关闭---WebPack 警告WARNING in asset size limit: The following asset(s) exceed the recommended size limit (244 KiB)

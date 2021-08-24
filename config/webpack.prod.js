@@ -8,20 +8,20 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
     mode: 'production',// 配置工作模式
-    entry: ['./src/js/index.js', './public/index.html'],// 入口(简写)
+    entry: ['./src/index.js', './public/index.html'],// 入口(简写)
     // entry: {
     //     main: './src/js/index.js'
     // },
     output: {// 出口
         path: resolve(__dirname, '../dist'),// 输出路径
         filename: './js/index.js',// 输出的文件名
-        publicPath: '/'// 所有输出资源在引入时的公共路径
+        publicPath: ''// 所有输出资源在引入时的公共路径
     },
     module: {
         rules: [
             // 解析less
             {
-                test: /\.less$/,// 匹配所有的less文件
+                test: /\.(less|css)$/,// 匹配所有的less文件
                 use: [
                     MiniCssExtractPlugin.loader,
                     // 'style-loader',// 用于在html文档中创建一个style标签，将样式塞进去
@@ -55,11 +55,11 @@ module.exports = {
 
             {
                 test: /\.js$/,// 匹配所有js文件
-                exclude: /node_modules/,// 排除node_modules
-                enforce: 'pre',// 提前加载使用
-                use: {
-                    loader: 'eslint-loader'
-                }
+                // exclude: /node_modules/,// 排除node_modules
+                // enforce: 'pre',// 提前加载使用
+                // use: {
+                //     loader: 'eslint-loader'
+                // }
             },
             // js语法转换（es6->es5） 
             {
@@ -136,6 +136,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html',// 以当前文件作为模板创建新的html（1.结构和原来一样2.会自动引入打包的资源）
+            favicon: resolve('./public/favicon_icon.ico') ,
             minify: {
                 removeComments: true,// 移除注释
                 collapseWhitespace: true,// 折叠所有留白
