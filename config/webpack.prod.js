@@ -46,21 +46,21 @@ module.exports = {
                     'less-loader'// 将less编译为css，但不生成单独的css文件，在内存中
                 ]
             },
-            // {
-            //     test: /\.js$/,// 匹配所有js文件
-            //     exclude: /node_modules/,// 排除node_modules
-            //     loader: 'eslint-loader',
-            //     options: {}
-            // }
-
             {
                 test: /\.js$/,// 匹配所有js文件
-                // exclude: /node_modules/,// 排除node_modules
-                // enforce: 'pre',// 提前加载使用
-                // use: {
-                //     loader: 'eslint-loader'
-                // }
+                exclude: /node_modules/,// 排除node_modules
+                loader: 'eslint-loader',
+                options: {}
             },
+
+            // {
+            //     test: /\.js$/,// 匹配所有js文件
+            //     // exclude: /node_modules/,// 排除node_modules
+            //     // enforce: 'pre',// 提前加载使用
+            //     // use: {
+            //     //     loader: 'eslint-loader'
+            //     // }
+            // },
             // js语法转换（es6->es5） 
             {
                 test: /\.js$/,
