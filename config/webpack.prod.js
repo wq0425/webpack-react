@@ -1,9 +1,10 @@
 // 生产环境
-const { resolve } = require('path');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const copyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
     //     main: './src/js/index.js'
     // },
     output: {// 出口
-        path: resolve(__dirname, '../dist'),// 输出路径
+        path: path.resolve(__dirname, '../dist'),// 输出路径
         filename: './js/index.js',// 输出的文件名
         publicPath: ''// 所有输出资源在引入时的公共路径
     },
@@ -31,7 +32,7 @@ module.exports = {
                         options: {
                             ident: 'postcss',
                             plugins: () => [
-                                require('postcss-flexbugs-fixes'),// 用于控制flex
+                                require('postcss-flexbugs-fixes'),// 用于控制flex   4.2.1
                                 require('postcss-preset-env')({
                                     autoprefixer: {
                                         flexbox: 'no-2009'// 静止使用2009语法
@@ -43,7 +44,32 @@ module.exports = {
                             sourceMap: true
                         }
                     },
-                    'less-loader'// 将less编译为css，但不生成单独的css文件，在内存中
+                    // 'less-loader'// 将less编译为css，但不生成单独的css文件，在内存中
+                    {
+                        loader: 'less-loader',// 将less编译为css，但不生成单独的css文件，在内存中
+                        options: {
+                            lessOptions: {
+                                javascriptEnabled: true
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: "css-loader",
+                        options: {
+                            //   sourceMap: true,
+                            importLoaders: 1,
+                            modules: {
+                                localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                            }
+                        }
+                    },
+                    "sass-loader"
                 ]
             },
             {
@@ -134,9 +160,15 @@ module.exports = {
     },
     // 配置插件
     plugins: [
+        new copyWebpackPlugin({
+            patterns: [{//复制static到dist
+                from: path.resolve(__dirname, '../src/static'),//打包的静态资源目录地址
+                to: './static' //打包到dist下面的static
+            }]
+        }),
         new HtmlWebpackPlugin({
             template: './public/index.html',// 以当前文件作为模板创建新的html（1.结构和原来一样2.会自动引入打包的资源）
-            favicon: resolve('./public/favicon_icon.ico') ,
+            favicon: path.resolve('./public/favicon_icon.ico') ,
             minify: {
                 removeComments: true,// 移除注释
                 collapseWhitespace: true,// 折叠所有留白
@@ -175,6 +207,7 @@ module.exports = {
             }
         })
     ],
+    // devtool: "eval",	// 禁用sourceMap
     // 代码映射，方便调试代码
     devtool: 'cheap-module-source-map'
 }

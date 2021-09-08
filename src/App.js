@@ -1,5 +1,10 @@
+import { DatePicker, Button } from 'antd';
+
 import logo from './logo.svg';
-import './App.css';
+import './App.less';
+
+
+import ChangeTheme from './components/change-theme';
 
 function App() {
   return (
@@ -17,6 +22,8 @@ function App() {
         >
           Learn React
         </a>
+        <DatePicker/>
+        <ChangeTheme/>
       </header>
     </div>
   );
